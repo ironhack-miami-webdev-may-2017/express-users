@@ -31,7 +31,7 @@ router.post('/signup', (req, res, next) => {
             return;
           }
 
-          // If the username is not taken, the "userFromDb" variable will empty.
+          // If the username is not taken, the "userFromDb" variable will be empty.
 
           // Check if "userFromDb" is not empty
           if (userFromDb) {
