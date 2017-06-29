@@ -6,7 +6,11 @@ const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
 const layouts      = require('express-ejs-layouts');
 const mongoose     = require('mongoose');
+const session      = require('express-session');
+const passport     = require('passport');
 
+// Run all the code inside "config/passport-config.js"
+require('./config/passport-config.js');
 
 mongoose.connect('mongodb://localhost/express-users');
 
@@ -27,6 +31,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(layouts);
+app.use(session({
+    // the value of "secret" doesn't matter except it has to be different for every app
+  secret: 'alksjflak sdjfkaj sdlfj alskdjf lasjdl faskdj fl',
+  resave: true,
+  saveUninitialized: true
+}));   // 2 parentheses:  1 for "app.use(" and another for "session("
+
+// PASSPORT middlewares ⟱⟱⟱ --------------------------------------------------
+// 🚨🚨🚨 these need to come after "app.use(session(...));" 🚨🚨🚨
+app.use(passport.initialize());
+app.use(passport.session());
+// PASSPORT middlewares ⟰⟰⟰ --------------------------------------------------
 
 
 
