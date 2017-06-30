@@ -38,7 +38,21 @@ router.post('/rooms', (req, res, next) => {
 
 
 router.get('/my-rooms', (req, res, next) => {
-    res.render('room-views/room-list-view.ejs');
+    RoomModel.find(
+        // find the rooms owned by the logged in user
+      { owner: req.user._id },
+
+      (err, roomResults) => {
+          if (err) {
+            next(err);
+            return;
+          }
+
+          res.locals.roomsAndStuff = roomResults;
+
+          res.render('room-views/room-list-view.ejs');
+      }
+    );
 });
 
 
