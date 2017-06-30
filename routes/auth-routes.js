@@ -114,4 +114,31 @@ router.get('/logout', (req, res, next) => {
 
 
 
+
+// SOCIAL LOGINS ---------------------------------------------------------------
+                                  // determined by the strategy's npm package
+                                  //                    |
+router.get('/auth/facebook', passport.authenticate('facebook'));
+          //        |
+          // GO HERE to login with Facebook
+
+
+// When you come back from Facebook you go THERE
+//                                           |
+//                   -------------------------
+//                   |
+router.get('/auth/facebook/callback',
+  passport.authenticate(
+     'facebook',  // 1st argument -> name of the strategy
+      {           // 2nd argument -> settings object
+        successRedirect: '/special',
+        failureRedirect: '/login'
+      }
+  )
+);
+
+// END SOCIAL LOGINS -----------------------------------------------------------
+
+
+
 module.exports = router;
