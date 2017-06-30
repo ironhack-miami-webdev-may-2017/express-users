@@ -9,7 +9,15 @@ const router = express.Router();
 
 // REGISTRATION ----------------------------------------------------------------
 router.get('/signup', (req, res, next) => {
+  // Redirect to home you are already logged in.
+  if (req.user) {
+    res.redirect('/');
+  }
+
+  // If not logged in, show the sign up page.
+  else {
     res.render('auth-views/signup-view.ejs');
+  }
 });
 
 router.post('/signup', (req, res, next) => {
@@ -73,7 +81,15 @@ const passport = require('passport');
 
 // LOG IN ----------------------------------------------------------------------
 router.get('/login', (req, res, next) => {
+  // Redirect to home you are already logged in.
+  if (req.user) {
+    res.redirect('/');
+  }
+
+  // If not logged in, show the log in page.
+  else {
     res.render('auth-views/login-view.ejs');
+  }
 });
 
 router.post('/login',
