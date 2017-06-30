@@ -90,4 +90,12 @@ router.post('/login',
 
 
 
+router.get('/logout', (req, res, next) => {
+    // the "req.logout()" function is defined by the passport middleware (app.js)
+    req.logout();
+    res.redirect('/');
+});
+
+
+
 module.exports = router;

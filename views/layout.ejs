@@ -13,11 +13,18 @@
         <a href="/"> Home </a>
         <br>
 
-        <a href="/signup"> Sign Up </a>
-        <br>
+        <% if (typeof currentUser === 'object') { %>
+            <!-- If we got the logged in user variable -->
+            <a href="/logout"> Log Out </a>
+            <br>
+        <% } else { %>
+            <a href="/signup"> Sign Up </a>
+            <br>
 
-        <a href="/login"> Log In </a>
-        <br>
+            <a href="/login"> Log In </a>
+            <br>
+        <% } %>
+
       </nav>
     </header>
 
