@@ -137,6 +137,37 @@ router.get('/auth/facebook/callback',
   )
 );
 
+
+
+router.get('/auth/google',
+        //        |
+        // GO HERE to login with Google
+  passport.authenticate(
+      'google',   // determined by the strategy's npm package
+      {
+        scope: [
+          'https://www.googleapis.com/auth/plus.login',
+          'https://www.googleapis.com/auth/plus.profile.emails.read'
+        ]
+      }
+  )
+);
+
+
+// When you come back from Google you go THERE
+//                                           |
+//                   -------------------------
+//                   |
+router.get('/auth/google/callback',
+  passport.authenticate(
+      'google',  // 1st argument -> name of the strategy
+      {          // 2nd argument -> settings object
+        successRedirect: '/special',
+        failureRedirect: '/login'
+      }
+  )
+);
+
 // END SOCIAL LOGINS -----------------------------------------------------------
 
 
