@@ -6,7 +6,13 @@ const router = express.Router();
 
 
 router.get('/rooms/new', (req, res, next) => {
-    res.render('room-views/new-room-view.ejs');
+    if (req.user) {
+      res.render('room-views/new-room-view.ejs');
+    }
+
+    else {
+      res.redirect('/login');
+    }
 });
 
 router.post('/rooms', (req, res, next) => {
@@ -38,6 +44,11 @@ router.post('/rooms', (req, res, next) => {
 
 
 router.get('/my-rooms', (req, res, next) => {
+    if (req.user === undefined) {
+      res.redirect('/login');
+      return;
+    }
+
     RoomModel.find(
         // find the rooms owned by the logged in user
       { owner: req.user._id },
