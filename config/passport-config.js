@@ -96,3 +96,62 @@ passport.use(new LocalStrategy(
       );
   }
 ));
+
+
+// passport-facebook (log in with with your Facebook account)
+const FbStrategy = require('passport-facebook').Strategy;
+
+passport.use(new FbStrategy(
+  {   // 1st argument -> settings object
+    clientID: 'blahblahblah',
+    clientSecret: 'blahblahblah',
+    callbackURL: '/auth/facebook/callback'
+  },              // out route (name this whatever you want)
+
+  (accessToken, refreshToken, profile, next) => {  // 2nd argument -> callback
+          // (will be called when a user allows us to log them in with Facebook)
+      console.log('');
+      console.log('---------👖 FACEBOOK PROFILE INFO 👖---------');
+      console.log(profile);
+      console.log('');
+
+      UserModel.findOne(
+        { facebookId: profile.id },
+
+        (err, userFromDb) => {
+            if (err) {
+              next(err);
+                //  |
+                // error in 1st argument means something unforeseen happened 😫
+              return;
+            }
+
+            // "userFromDb" will be empty if
+            // this is first time the user logs in with Facebook
+
+            // Check if they have logged in before
+            if (userFromDb) {
+              // If they have, just log them in.
+              next(null, userFromDb);
+              return;
+            }
+
+            // If it's the first time they log in, SAVE THEM IN THE DB!
+            const theUser = new UserModel({
+              fullName: profile.displayName,
+              facebookId: profile.id
+            });
+
+            theUser.save((err) => {
+                if (err) {
+                  next(err);
+                  return;
+                }
+
+                // Now that they are saved, log them in.
+                next(null, theUser);
+            });
+        }
+      );
+  }
+));
