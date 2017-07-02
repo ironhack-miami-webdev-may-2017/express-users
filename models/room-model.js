@@ -12,7 +12,7 @@ const myRoomSchema = new Schema(
     hasGhosts: { type: Boolean, default: false },
 
     // the id of the user who owns the room
-    owner: { type: Schema.Types.ObjectId }
+    owner: { type: Schema.Types.ObjectId, ref: 'User' }
   },
 
   {

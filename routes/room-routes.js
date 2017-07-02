@@ -49,11 +49,10 @@ router.get('/my-rooms', (req, res, next) => {
       return;
     }
 
-    RoomModel.find(
-        // find the rooms owned by the logged in user
-      { owner: req.user._id },
-
-      (err, roomResults) => {
+    RoomModel
+      .find({ owner: req.user._id })
+      .populate('owner')
+      .exec((err, roomResults) => {
           if (err) {
             next(err);
             return;
@@ -62,8 +61,7 @@ router.get('/my-rooms', (req, res, next) => {
           res.locals.roomsAndStuff = roomResults;
 
           res.render('room-views/room-list-view.ejs');
-      }
-    );
+      });
 });
 
 
