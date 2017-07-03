@@ -15,32 +15,57 @@ router.get('/rooms/new', (req, res, next) => {
     }
 });
 
-router.post('/rooms', (req, res, next) => {
-    const theRoom = new RoomModel({
-      name: req.body.roomName,
-      description: req.body.roomDescription,
-      photoUrl: req.body.roomPhotoUrl,
-      hasGhosts: false,
 
-      // Set the owner as the logged in user's database id
-      owner: req.user._id
-    });
 
-    const coinFlip = Math.floor(Math.random() * 2);
+const multer = require('multer');
 
-    if (coinFlip === 1) {
-      theRoom.hasGhosts = true;
-    }
-
-    theRoom.save((err) => {
-        if (err) {
-          next(err);
-          return;
-        }
-
-        res.redirect('/my-rooms');
-    });
+const myUploader = multer({
+    // "dest" (destination) is a multer setting
+    // that specifies WHERE to put uploaded files
+  dest: __dirname + '/../public/uploads/'
+    // save uploaded files inside public/uploads/
 });
+
+
+router.post(
+  '/rooms',
+    // Use multer to process a SINGLE file upload from the input named "roomPhoto"
+  myUploader.single('roomPhoto'),
+     //                  |
+     // <input name="roomPhoto">
+  (req, res, next) => {
+      // multer will create "req.file" that contains information about the upload
+      console.log('');
+      console.log('🗂 req.file (file upload from multer) 📷 ------------------');
+      console.log(req.file);
+      console.log('');
+
+      const theRoom = new RoomModel({
+        name: req.body.roomName,
+        description: req.body.roomDescription,
+        photoUrl: '/uploads/' + req.file.filename,
+        hasGhosts: false,
+
+        // Set the owner as the logged in user's database id
+        owner: req.user._id
+      });
+
+      const coinFlip = Math.floor(Math.random() * 2);
+
+      if (coinFlip === 1) {
+        theRoom.hasGhosts = true;
+      }
+
+      theRoom.save((err) => {
+          if (err) {
+            next(err);
+            return;
+          }
+
+          res.redirect('/my-rooms');
+      });
+  }
+);
 
 
 router.get('/my-rooms', (req, res, next) => {
