@@ -103,8 +103,8 @@ const FbStrategy = require('passport-facebook').Strategy;
 
 passport.use(new FbStrategy(
   {   // 1st argument -> settings object
-    clientID: 'blah blah blah',
-    clientSecret: 'blah blah blah',
+    clientID: process.env.myFacebookClientId,
+    clientSecret: process.env.myFacebookClientSecret,
     callbackURL: '/auth/facebook/callback'
   },              // out route (name this whatever you want)
 
@@ -163,8 +163,8 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 passport.use(new GoogleStrategy(
   {   // 1st argument -> settings object
-    clientID: 'blah blah blah',
-    clientSecret: 'blah blah blah',
+    clientID: process.env.myGoogleClientId,
+    clientSecret: process.env.myGoogleClientSecret,
     callbackURL: '/auth/google/callback'
   },              // out route (name this whatever you want)
 

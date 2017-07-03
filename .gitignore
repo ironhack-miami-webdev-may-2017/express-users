@@ -28,3 +28,7 @@ node_modules
 
 # Debug log from npm
 npm-debug.log
+
+# File that contains environment variables for development
+# (this file has all the secret credentials that we DON'T want to commit)
+.env
